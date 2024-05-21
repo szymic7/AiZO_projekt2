@@ -1,4 +1,5 @@
 #include <iostream>
+#include "../../headers/graphs/graph.h"
 
 using namespace std;
 
@@ -139,6 +140,31 @@ void showMenu() {
 
 
 int main() {
-    showMenu();
+    //showMenu();
+
+    // TEST
+
+    Graph graph(4, 50);
+    int **matrix;
+
+    // alokacja pamieci dla tablicy dwuwymiarowej
+    matrix = new int*[4];
+    for (int i = 0; i < 4; ++i) {
+        matrix[i] = new int[5];
+    }
+
+    // przypisanie wartosci do elementow macierzy
+    int number = -7;
+    for(int i = 0; i < 4; i++) {
+        for(int j = 0; j < 5; j++) {
+            matrix[i][j] = number;
+            number++;
+        }
+    }
+
+    graph.setIncidenceMatrix(matrix);
+    graph.setEdges(5);
+    graph.showIncidenceMatrix();
+
     return 0;
 }
