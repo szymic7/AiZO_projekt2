@@ -10,6 +10,7 @@ class List {
 public:
     List(Edge *first = nullptr);
     void addEdge(Edge *edge); // przed wywolaniem trzeba utworzyc wskaznik na edge
+    Edge* findEdge(int end);
 };
 
 #endif //AIZO_PROJEKT2_LIST_H

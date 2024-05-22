@@ -14,7 +14,7 @@ class Graph {
     int edges;      // zmienna pomocnicza
 
     List *adjacencyList;        // tablica list - |V| list, w kazdej maksymalnie |E| krawedzi
-    int **indicenceMatrix;    // tablica dwuwymiarowa, wiersze = wierzcholki, kolumny = krawedzie
+    int **incidenceMatrix;    // tablica dwuwymiarowa, wiersze = wierzcholki, kolumny = krawedzie
 
 public:
     Graph(int v = 0, int d = 0);

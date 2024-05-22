@@ -144,8 +144,10 @@ int main() {
 
     // TEST
 
-    Graph graph(4, 50);
-    int **matrix;
+    Graph graph(10, 10);
+    graph.generateGraph();
+
+    /*int **matrix;
 
     // alokacja pamieci dla tablicy dwuwymiarowej
     matrix = new int*[4];
@@ -163,7 +165,9 @@ int main() {
     }
 
     graph.setIncidenceMatrix(matrix);
-    graph.setEdges(5);
+    graph.setEdges(5);*/
+
+
     graph.showIncidenceMatrix();
 
     return 0;

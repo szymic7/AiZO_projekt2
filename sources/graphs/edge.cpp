@@ -13,3 +13,11 @@ void Edge::setNext(Edge *next) {
 Edge* Edge::getNext() {
     return nextEdge; // zwracany wskaznik na kolejna krawedz lub nullptr
 }
+
+int Edge::getEnd() {
+    return end;
+}
+
+int Edge::getWeight() {
+    return weight;
+}
