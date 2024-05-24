@@ -1,4 +1,7 @@
+#include <iostream>
 #include "../../headers/graphs/list.h"
+
+using namespace std;
 
 List::List(Edge *first) {
     firstEdge = first;
@@ -32,4 +35,32 @@ Edge* List::findEdge(int end) {
         current = current->getNext();
     }
     return nullptr;
+}
+
+void List::printList() {
+
+    // Jesli lista jest pusta
+    if(firstEdge == nullptr) return;
+
+    // Wyswietlenie pierwszej krawedzi (bez strzalki poprzedzajacej)
+    Edge *edge = firstEdge;
+    edge->printEdge();
+
+    // Wyswietlanie kolejnych krawedzi - ze strzalka poprzedzajaca
+    while(edge->getNext() != nullptr) {
+        cout << " -> ";
+        edge = edge->getNext();
+        edge->printEdge();
+    }
+
+}
+
+void List::clear() {
+    Edge *current = firstEdge;
+    while (current != nullptr) {
+        Edge *temp = current;
+        current = current->getNext();
+        delete temp;
+    }
+    firstEdge = nullptr;
 }

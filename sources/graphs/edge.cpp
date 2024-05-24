@@ -1,4 +1,7 @@
+#include <iostream>
 #include "../../headers/graphs/edge.h"
+
+using namespace std;
 
 Edge::Edge(int e, int w) {
     end = e;
@@ -20,4 +23,8 @@ int Edge::getEnd() {
 
 int Edge::getWeight() {
     return weight;
+}
+
+void Edge::printEdge() {
+    cout << "(" << end << ":" << weight << ")";
 }

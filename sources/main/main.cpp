@@ -8,6 +8,8 @@ void showMenu() {
     // ZMIENNE POMOCNICZE
     int problem = 0, choice = 0;
     bool quit = false;
+    Graph graph;
+    int vertices, density;
 
     // PIERWSZY POZIOM MENU - WYBOR PROBLEMU DO ROZWIAZANIA
     do {
@@ -62,12 +64,36 @@ void showMenu() {
 
             case 2: // Genrowanie losowego grafu
 
-                // WYGENEROWANIE GRAFU
+                cout << endl << "Podaj liczbe wierzcholkow grafu:";
+                cin >> vertices;
+                while(vertices < 1) {
+                    cout << endl <<  "Nieprawidlowa wartosc.\nPodaj liczbe wierzcholkow grafu:";
+                    cin >> vertices;
+                }
+
+                cout << "Podaj gestosc grafu w procentach:";
+                cin >> density;
+                while(density < 0 || density > 100) {
+                    cout << endl <<  "Nieprawidlowa wartosc.\nPodaj gestosc grafu w procentach:";
+                    cin >> density;
+                }
+
+                graph = Graph(vertices, density);
+
+                if(problem == 1) graph.generateGraph(false);    // MST - graf nieskierowany
+                else graph.generateGraph(true); // Najkrotsza droga i max przeplyw - graf skierowany
+
                 break;
 
             case 3: // Wyswietlenie grafu
 
-                // WYSWIETLENIE GRAFU
+                if(graph.getAdjacencyList() != nullptr && graph.getIncidenceMatrix() != nullptr) {
+                    graph.showAdjacencyList();
+                    graph.showIncidenceMatrix();
+                } else {
+                    cout << endl << "Utworz graf, aby moc go wyswietlic." << endl;
+                }
+
                 break;
 
             case 4: // Pierwszy algorytm
@@ -140,35 +166,15 @@ void showMenu() {
 
 
 int main() {
-    //showMenu();
+    showMenu();
 
     // TEST
 
-    Graph graph(10, 10);
-    graph.generateGraph();
+    /*Graph graph(16, 25);
+    graph.generateGraph(false);
 
-    /*int **matrix;
-
-    // alokacja pamieci dla tablicy dwuwymiarowej
-    matrix = new int*[4];
-    for (int i = 0; i < 4; ++i) {
-        matrix[i] = new int[5];
-    }
-
-    // przypisanie wartosci do elementow macierzy
-    int number = -7;
-    for(int i = 0; i < 4; i++) {
-        for(int j = 0; j < 5; j++) {
-            matrix[i][j] = number;
-            number++;
-        }
-    }
-
-    graph.setIncidenceMatrix(matrix);
-    graph.setEdges(5);*/
-
-
-    graph.showIncidenceMatrix();
+    graph.showAdjacencyList();
+    graph.showIncidenceMatrix();*/
 
     return 0;
 }

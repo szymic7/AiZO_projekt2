@@ -19,7 +19,10 @@ class Graph {
 public:
     Graph(int v = 0, int d = 0);
     void loadGraph(string txt);
-    void generateGraph();
+    void generateGraph(bool directed);
+    List *getAdjacencyList();
+    int **getIncidenceMatrix();
+    void clearAdjacencyList();
     void showAdjacencyList();
     void showIncidenceMatrix();
 

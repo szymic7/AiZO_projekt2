@@ -14,6 +14,7 @@ public:
     int getEnd();
     int getWeight();
     Edge* getNext();
+    void printEdge();
 
 };
 
