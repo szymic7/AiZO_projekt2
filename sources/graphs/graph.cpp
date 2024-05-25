@@ -3,6 +3,8 @@
 #include <cstdlib>
 #include <ctime>
 #include <algorithm>
+#include <chrono>
+#include <random>
 #include "../../headers/graphs/graph.h"
 
 using namespace std;
@@ -13,11 +15,6 @@ Graph::Graph(int v, int d) {
     edges = 0;
     adjacencyList = nullptr;
     incidenceMatrix = nullptr;
-    /*adjacencyList = new List[vertices];
-    incidenceMatrix = new int*[vertices];
-    for (int i = 0; i < vertices; ++i) {
-        incidenceMatrix[i] = nullptr;
-    }*/
 }
 
 void Graph::loadGraph(string txt) {
@@ -29,6 +26,10 @@ void Graph::generateGraph(bool directed) {
 
     // Inicjalizacja generatora liczb losowych
     srand(time(0));
+
+    // Inicjalizacja generatora liczb losowych
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine rng(seed);
 
     // Obliczenie maksymalnej liczby krawędzi dla grafu skierowanego V*(V-1) i nieskierowanego: V*(V-1)/2
     int maxEdges = directed ? vertices * (vertices - 1) : vertices * (vertices - 1) / 2;
@@ -70,6 +71,13 @@ void Graph::generateGraph(bool directed) {
     // Inicjalizacja nowej listy sąsiadów
     adjacencyList = new List[vertices];
 
+    // Utworzenie wektora z kolejnoscia losowa dla wierzcholkow - dla zapewnienia spojnosci grafu skierowanego
+    std::vector<int> randomOrder(vertices);
+    for (int i = 0; i < vertices; ++i) {
+        randomOrder[i] = i;
+    }
+    std::shuffle(randomOrder.begin(), randomOrder.end(), rng);
+
     // Lista możliwych krawędzi
     std::vector<std::pair<int, int>> possibleEdges;
     for (int i = 0; i < vertices; ++i) {
@@ -90,34 +98,59 @@ void Graph::generateGraph(bool directed) {
 
     int edgeCount = 0;
 
-    // Dodawanie krawędzi w celu zapewnienia spójności
-    while (edgeCount < minEdges) {
-        int u = connectedVertices[rand() % connectedVertices.size()];
-        int v = rand() % vertices;
-        while (connected[v]) {
-            v = rand() % vertices;
+    if(directed) {  // graf skierowany
+
+        // Utworzenie cyklu zawierajacego wszystkie wierzcholki w celu zapewnienia spojnosci
+        for (int i = 0; i < vertices; ++i) {
+            int u = randomOrder[i];
+            int v = randomOrder[(i + 1) % vertices];
+
+            // Dodanie krawędzi
+            int weight = rand() % 20 + 1;
+            Edge *newEdgeU = new Edge(v, weight);
+            adjacencyList[u].addEdge(newEdgeU);
+
+            incidenceMatrix[u][edgeCount] = weight;
+            incidenceMatrix[v][edgeCount] = -weight; // graf skierowany
+
+            edgeCount++;
+
+            // Usun dodana krawedz z listy mozliwych krawedzi
+            possibleEdges.erase(std::remove(possibleEdges.begin(), possibleEdges.end(), std::make_pair(u, v)), possibleEdges.end());
         }
-        connected[v] = true;
-        connectedVertices.push_back(v);
 
-        // Dodanie krawędzi
-        int weight = rand() % 20 + 1;
-        Edge *newEdgeU = new Edge(v, weight);
-        adjacencyList[u].addEdge(newEdgeU);
 
-        if (!directed) {    // graf nieskierowany
+    } else {    // graf nieskierowany
+
+        // Dodawanie krawedzi w celu zapewnienia spojnosci
+        while (edgeCount < minEdges) {
+            int u = connectedVertices[rand() % connectedVertices.size()];
+            int v = rand() % vertices;
+            while (connected[v]) {
+                v = rand() % vertices;
+            }
+            connected[v] = true;
+            connectedVertices.push_back(v);
+
+            // Dodanie krawedzi
+            int weight = rand() % 20 + 1;
+            Edge *newEdgeU = new Edge(v, weight);
+            adjacencyList[u].addEdge(newEdgeU);
+
             Edge *newEdgeV = new Edge(u, weight);
             adjacencyList[v].addEdge(newEdgeV);
+
+            incidenceMatrix[u][edgeCount] = weight;
+            incidenceMatrix[v][edgeCount] = weight;  // graf nieskierowany
+
+            edgeCount++;
+
+            // Usun dodana krawedz z listy mozliwych krawedzi
+            possibleEdges.erase(std::remove(possibleEdges.begin(), possibleEdges.end(), std::make_pair(u, v)), possibleEdges.end());
         }
 
-        incidenceMatrix[u][edgeCount] = weight;
-        if (directed) {
-            incidenceMatrix[v][edgeCount] = -weight; // graf skierowany
-        } else {
-            incidenceMatrix[v][edgeCount] = weight;  // graf nieskierowany
-        }
-        edgeCount++;
     }
+
 
     // Dodawanie losowych krawędzi do osiągnięcia docelowej liczby krawędzi
     while (edgeCount < edges && !possibleEdges.empty()) {
