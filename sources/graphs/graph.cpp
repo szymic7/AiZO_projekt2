@@ -229,6 +229,15 @@ void Graph::generateGraph(bool directed) {
     }*/
 //}
 
+int Graph::getVertices() {
+    return vertices;
+}
+
+
+int Graph::getEdges() {
+    return edges;
+}
+
 
 List *Graph::getAdjacencyList() {
     return adjacencyList;

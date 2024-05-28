@@ -20,6 +20,8 @@ public:
     Graph(int v = 0, int d = 0);
     void loadGraph(string txt);
     void generateGraph(bool directed);
+    int getVertices();
+    int getEdges();
     List *getAdjacencyList();
     int **getIncidenceMatrix();
     void clearAdjacencyList();

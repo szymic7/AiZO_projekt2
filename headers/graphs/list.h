@@ -10,6 +10,7 @@ class List {
 public:
     List(Edge *first = nullptr);
     void addEdge(Edge *edge); // przed wywolaniem trzeba utworzyc wskaznik na edge
+    Edge* getFirstEdge();
     Edge* findEdge(int end);
     void printList();   // najpierw nalezy wyswietlic numer wierzcholka np "1: " - w metodzie Graph::showAdjacencyList()
     void clear();

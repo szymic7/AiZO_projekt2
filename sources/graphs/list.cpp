@@ -26,6 +26,12 @@ void List::addEdge(Edge *pEdge) {
 
 }
 
+
+Edge *List::getFirstEdge() {
+    return firstEdge;
+}
+
+
 Edge* List::findEdge(int end) {
     Edge *current = firstEdge;
     while (current != nullptr) {
