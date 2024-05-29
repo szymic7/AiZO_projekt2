@@ -212,7 +212,7 @@ void showMenu() {
                         if(graph.getIncidenceMatrix() != nullptr && graph.getAdjacencyList() != nullptr) {
 
                             // Ustawienie wierzcholka poczatkowego
-                            cout << "Podaj wierzcholek poczatkowy:";
+                            cout << endl << "Podaj wierzcholek poczatkowy:";
                             cin >> start;
                             while (start < 0 || start >= graph.getVertices()) {
                                 cout << "Nieprawidlowy numer wierzcholka startowego." << endl;

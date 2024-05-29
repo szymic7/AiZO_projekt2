@@ -26,6 +26,18 @@ void List::addEdge(Edge *pEdge) {
 
 }
 
+void List::addEdgeFront(Edge *edge) {
+
+    // Jesli lista jest pusta
+    if(firstEdge == nullptr) firstEdge = edge;
+
+    else {
+        edge->setNext(firstEdge);
+        firstEdge = edge;
+    }
+
+}
+
 
 Edge *List::getFirstEdge() {
     return firstEdge;

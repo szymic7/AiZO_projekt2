@@ -7,19 +7,20 @@
 
 class BellmanFord : public Algorithm {
 
-    int start, end;
-    List pathList, pathMatrix;
-    int pathWeightList, pathWeightMatrix;
+    int start, end; // wierzcholek startowy i koncowy
+    List pathList, pathMatrix; // listy krawedzi najkrotszej sciezki dla reprezentacji listowej i macierzowej grafu
+    int pathWeightList, pathWeightMatrix; // calkowity koszt sciezki dla reprezentacji listowej i macierzowej grafu
+    int *d, *p; // tablice sledzace odleglosc wierzcholkow od wierzcholka startowego i poprzednikow wierzcholkow
 
 public:
 
-    BellmanFord();
-    void setStart(int s);
-    void setEnd(int e);
-    void algorithmList();
-    void algorithmMatrix();
-    void showPathList();
-    void showPathMatrix();
+    BellmanFord();          // kontruktor
+    void setStart(int s);   // ustawienie wierzcholka startowego algorytmu
+    void setEnd(int e);     // ustawienie wierzcholka koncowego algorytmu
+    void algorithmList();   // algorytm dla reprezentacji grafu w formie listy sasiadow
+    void algorithmMatrix(); // algorytm dla reprezentacji grafu w formie macierzy incydencji
+    void showPathList();    // wyswietlenie wynikow algorytmu dla reprezntacji listowej grafu
+    void showPathMatrix();  // wyswietlenie wynikow algorytmu dla reprezentacji macierzowej grafu
 
 };
 

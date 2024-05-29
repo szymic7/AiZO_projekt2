@@ -24,11 +24,12 @@ void Dijkstra::setEnd(int e) {
 }
 
 
-
 void Dijkstra::algorithmList() {
 
-    // Wyczyszczenie istniejacej listy krawedzi najkrotszej sciezki
+    // Wyczyszczenie istniejacej listy krawedzi najkrotszej sciezki i tablic d oraz p
     pathList.clear();
+    delete[] d;
+    delete[] p;
 
     // Liczba wierzcholkow grafu - rozmiar tablic d i p
     int V = getGraph()->getVertices();
@@ -77,7 +78,7 @@ void Dijkstra::algorithmList() {
     for (int at = end; at != start; at = p[at]) {   // dodajemy krawedzie zaczynajac od end i idac w strone start
         if (p[at] != -1) {
             Edge *newEdge = new Edge(at, d[at] - d[p[at]]);
-            pathList.addEdge(newEdge);
+            pathList.addEdgeFront(newEdge);
         }
     }
 
@@ -88,8 +89,10 @@ void Dijkstra::algorithmList() {
 
 void Dijkstra::algorithmMatrix() {
 
-    // Wyczyszczenie istniejacej listy krawedzi najkrotszej sciezki
+    // Wyczyszczenie istniejacej listy krawedzi najkrotszej sciezki i tablic d oraz p
     pathMatrix.clear();
+    delete[] d;
+    delete[] p;
 
     // Liczba wierzcholkow grafu - rozmiar tablic d i p
     int V = getGraph()->getVertices();
@@ -155,7 +158,7 @@ void Dijkstra::algorithmMatrix() {
     for (int at = end; at != start; at = p[at]) {   // dodajemy krawedzie zaczynajac od end i idac w strone start
         if (p[at] != -1) {
             Edge *newEdge = new Edge(at, d[at] - d[p[at]]);
-            pathMatrix.addEdge(newEdge);
+            pathMatrix.addEdgeFront(newEdge);
         }
     }
 
@@ -166,11 +169,11 @@ void Dijkstra::algorithmMatrix() {
 
 void Dijkstra::showPathList() {
 
-    /*if(pathList.getFirstEdge() != nullptr) { // jesli najkrotsza sciezka nie jest pusta
+    if(pathList.getFirstEdge() != nullptr) { // jesli najkrotsza sciezka nie jest pusta
 
         Edge *current = pathList.getFirstEdge();
 
-        cout << "Znaleziona najktorsza sciezka dla reprezentacji listowej:" << endl;
+        cout << endl << "Znaleziona najktorsza sciezka dla reprezentacji listowej:" << endl;
 
         // Wyswietlenie pierwszej krawedzi w formacie: (u-v: w)
         cout << "(" << start << "-" << current->getEnd() << ": " << current->getWeight() << ")" << endl;
@@ -186,9 +189,9 @@ void Dijkstra::showPathList() {
 
     } else {    // jesli najkrotsza sciezka jest pusta
         cout << endl << "Uruchom algorytm, aby znalezc najkrotsza sciezke." << endl;
-    }*/
+    }
 
-    if(pathList.getFirstEdge() != nullptr) { // jesli najkrotsza sciezka nie jest pusta
+    /*if(pathList.getFirstEdge() != nullptr) { // jesli najkrotsza sciezka nie jest pusta
 
         // Pierwsza krawedzia na liscie jest ostatnia krawedzia sciezki
         Edge *current = pathList.getFirstEdge();
@@ -207,18 +210,18 @@ void Dijkstra::showPathList() {
 
     } else {    // jesli najkrotsza sciezka jest pusta
         cout << endl << "Uruchom algorytm, aby znalezc najkrotsza sciezke." << endl;
-    }
+    }*/
 
 }
 
 
 void Dijkstra::showPathMatrix() {
 
-    /*if(pathMatrix.getFirstEdge() != nullptr) { // jesli najkrotsza sciezka nie jest pusta
+    if(pathMatrix.getFirstEdge() != nullptr) { // jesli najkrotsza sciezka nie jest pusta
 
         Edge *current = pathMatrix.getFirstEdge();
 
-        cout << "Znaleziona najktorsza sciezka dla reprezentacji macierzowej:" << endl;
+        cout << endl << "Znaleziona najktorsza sciezka dla reprezentacji macierzowej:" << endl;
 
         // Wyswietlenie pierwszej krawedzi w formacie: (u-v: w)
         cout << "(" << start << "-" << current->getEnd() << ": " << current->getWeight() << ")" << endl;
@@ -234,9 +237,9 @@ void Dijkstra::showPathMatrix() {
 
     } else {    // jesli najkrotsza sciezka jest pusta
         cout << endl << "Uruchom algorytm, aby znalezc najkrotsza sciezke." << endl;
-    }*/
+    }
 
-    if(pathMatrix.getFirstEdge() != nullptr) { // jesli najkrotsza sciezka nie jest pusta
+    /*if(pathMatrix.getFirstEdge() != nullptr) { // jesli najkrotsza sciezka nie jest pusta
 
         // Pierwsza krawedzia na liscie jest ostatnia krawedzia sciezki
         Edge *current = pathMatrix.getFirstEdge();
@@ -255,6 +258,6 @@ void Dijkstra::showPathMatrix() {
 
     } else {    // jesli najkrotsza sciezka jest pusta
         cout << endl << "Uruchom algorytm, aby znalezc najkrotsza sciezke." << endl;
-    }
+    }*/
 
 }
