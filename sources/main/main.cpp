@@ -123,7 +123,15 @@ void showMenu() {
                     switch (problem) { // akcja w zaleznosci od wybranego problemu grafowego
                         case 1: // MST - algorytm Prima
 
-                            // ALGORYTM PRIMA
+                            // Ustawienie wierzcholka startowego
+                            cout << "Podaj wierzcholek startowy:";
+                            cin >> start;
+                            while (start < 0 || start >= graph.getVertices()) {
+                                cout << "Nieprawidlowy numer wierzcholka." << endl;
+                                cout << "Podaj poprawny wierzcholek startowy:";
+                                cin >> start;
+                            }
+                            prim.setStart(start);
                             break;
 
                         case 2: {   // Najkrotsza sciezka - algorytm Dijkstry
@@ -188,6 +196,7 @@ void showMenu() {
                     cout << endl << "Utworz graf, aby wykonac algorytm." << endl;
 
                 }
+
                 break;
 
             case 5: // Drugi algorytm / Zakoncz

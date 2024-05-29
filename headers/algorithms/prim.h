@@ -6,11 +6,17 @@
 
 class Prim : public Algorithm {
 
+    int start;
+    List mstList, mstMatrix;
+    int mstWeightList, mstWeightMatrix;
+
 public:
 
     Prim();
     void algorithmList();
     void algorithmMatrix();
+    void showMstList();
+    void showMstMatrix();
 
 };
 
