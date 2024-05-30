@@ -4,6 +4,7 @@
 using namespace std;
 
 Edge::Edge(int e, int w) {
+    //start = -1;
     end = e;
     weight = w;
     nextEdge = nullptr;
@@ -12,6 +13,10 @@ Edge::Edge(int e, int w) {
 void Edge::setNext(Edge *next) {
     nextEdge = next;
 }
+
+/*void Edge::setStart(int s) {
+    start = s;
+}*/
 
 Edge* Edge::getNext() {
     return nextEdge; // zwracany wskaznik na kolejna krawedz lub nullptr

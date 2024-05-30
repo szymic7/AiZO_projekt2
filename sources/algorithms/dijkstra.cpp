@@ -126,6 +126,7 @@ void Dijkstra::algorithmMatrix() {
 
         for (int i = 0; i < getGraph()->getEdges(); ++i) {   // szukamy kolumny, odpowiadajacej krawedzi (u, v)
 
+            // Sprawdzamy po kolei kazda krawedz, czy wychodzi z u
             weight = getGraph()->getIncidenceMatrix()[u][i];
             if (weight > 0) {   // gdy wartosc w macierzy jest dodatnia to krawedz wychodzi z u - szukamy v
                 // i = indeks kolumny dla szukanej krawedzi

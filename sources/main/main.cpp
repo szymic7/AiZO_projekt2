@@ -132,6 +132,26 @@ void showMenu() {
                                 cin >> start;
                             }
                             prim.setStart(start);
+
+                            pGraph = &graph;
+                            prim.setGraph(pGraph);
+
+                            // Algorytm Prima dla reprezentacji listowej grafu
+                            startTime = chrono::high_resolution_clock::now();
+                            prim.algorithmList();
+                            endTime = chrono::high_resolution_clock::now();
+                            time = chrono::duration<double, std::milli>(endTime - startTime);
+                            prim.showMstList();    // wyswietlenie MST dla reprezentacji listowej
+                            cout << "Czas dzialania algorytmu: " << time.count() << " ms\n" << endl;
+
+                            // Algorytm Prima dla reprezentacji macierzowej grafu
+                            startTime = chrono::high_resolution_clock::now();
+                            prim.algorithmMatrix();
+                            endTime = chrono::high_resolution_clock::now();
+                            time = chrono::duration<double, std::milli>(endTime - startTime);
+                            prim.showMstMatrix();    // wyswietlenie MST dla reprezemtacji macierzowej
+                            cout << "Czas dzialania algorytmu: " << time.count() << " ms" << endl;
+
                             break;
 
                         case 2: {   // Najkrotsza sciezka - algorytm Dijkstry

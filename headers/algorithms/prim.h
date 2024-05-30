@@ -9,14 +9,16 @@ class Prim : public Algorithm {
     int start;
     List mstList, mstMatrix;
     int mstWeightList, mstWeightMatrix;
+    int *p;
 
 public:
 
-    Prim();
-    void algorithmList();
-    void algorithmMatrix();
-    void showMstList();
-    void showMstMatrix();
+    Prim();                 // konstruktor
+    void setStart(int s);   // ustawienie wierzcholka startowego algorytmu
+    void algorithmList();   // algorytm dla reprezentacji grafu w formie listy sasiadow
+    void algorithmMatrix(); // algorytm dla reprezentacji grafu w formie macierzy incydencji
+    void showMstList();     // wyswietlenie wynikow algorytmu dla reprezntacji listowej grafu
+    void showMstMatrix();   // wyswietlenie wynikow algorytmu dla reprezntacji macierzowej grafu
 
 };
 
