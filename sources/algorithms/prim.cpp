@@ -41,7 +41,6 @@ void Prim::algorithmList() {
     pq.push(start);
 
 
-
     while (!pq.empty()) {
         int u = pq.top();
         pq.pop();
@@ -61,11 +60,10 @@ void Prim::algorithmList() {
     }
 
     // Zapisanie krawedzi nalezacych do MST do listy
-    for (int v = 0; v < V; ++v) {
+    for (int v = 0; v < V; v++) {
         if (p[v] != -1) {
             mstWeightList += key[v];
-            Edge* newEdge = new Edge(v, key[v]);
-            mstList.addEdge(newEdge);
+            mstList.addEdge(new Edge(v, key[v]));
         }
     }
 
@@ -117,8 +115,8 @@ void Prim::algorithmMatrix() {
 
                 if (v != -1 && !inMST[v] && key[v] > weight) {
                     key[v] = weight;
-                    pq.push(v);
                     p[v] = u;
+                    pq.push(v);
                 }
 
             }
@@ -127,11 +125,10 @@ void Prim::algorithmMatrix() {
 
     }
 
-    for (int v = 0; v < V; ++v) {
-        if (p[v] != -1) {
+    for (int v = 0; v < V; v++) {
+        if (p[v] != -1) {   // warunek nie bedzie spelniony tylko dla wierzcholka startowego
             mstWeightMatrix += key[v];
-            Edge* newEdge = new Edge(v, key[v]);
-            mstMatrix.addEdge(newEdge);
+            mstMatrix.addEdge(new Edge(v, key[v]));
         }
     }
 

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <chrono>
+#include <fstream>
 #include "../../headers/graphs/graph.h"
 #include "../../headers/algorithms/dijkstra.h"
 #include "../../headers/algorithms/bellmanFord.h"
@@ -77,10 +78,28 @@ void showMenu() {
         cin >> choice;
 
         switch(choice) {
-            case 1: // Wczytanie grafu z pliku .txt
 
-                // WCZYTANIE GRAFU Z PLIKU
+            case 1: { // Wczytanie grafu z pliku .txt
+
+                string filename;
+                cout << "Podaj nazwe pliku: ";
+                cin >> filename;
+
+                // Sprawdzenie istnienia pliku
+                ifstream file(filename);
+                if (!file.is_open()) {
+                    cout << endl << "Plik o nazwie " << filename << " nie istnieje." << endl;
+                    cout << "Nie udalo sie wygenerowac grafu." << endl;
+                    break;
+                }
+                file.close();
+
+                // Wczytanie grafu z pliku
+                graph.loadGraph(filename, problem != 1);    // problem == 1 - graf nieskierowany
+
                 break;
+
+            }
 
             case 2: // Genrowanie losowego grafu
 
@@ -124,7 +143,7 @@ void showMenu() {
                         case 1: // MST - algorytm Prima
 
                             // Ustawienie wierzcholka startowego
-                            cout << "Podaj wierzcholek startowy:";
+                            cout << endl << "Podaj wierzcholek startowy:";
                             cin >> start;
                             while (start < 0 || start >= graph.getVertices()) {
                                 cout << "Nieprawidlowy numer wierzcholka." << endl;
@@ -157,7 +176,7 @@ void showMenu() {
                         case 2: {   // Najkrotsza sciezka - algorytm Dijkstry
 
                             // Ustawienie wierzcholka poczatkowego
-                            cout << "Podaj wierzcholek poczatkowy:";
+                            cout << endl << "Podaj wierzcholek poczatkowy:";
                             cin >> start;
                             while (start < 0 || start >= graph.getVertices()) {
                                 cout << "Nieprawidlowy numer wierzcholka startowego." << endl;

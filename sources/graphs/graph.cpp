@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <chrono>
 #include <random>
+#include <fstream>
 #include "../../headers/graphs/graph.h"
 
 using namespace std;
@@ -17,9 +18,63 @@ Graph::Graph(int v, int d) {
     incidenceMatrix = nullptr;
 }
 
-void Graph::loadGraph(string txt) {
-    // Wczytanie grafu z pliku .txt
+
+void Graph::loadGraph(string txt, bool directed) {
+    ifstream file(txt);
+    if (!file.is_open()) {
+        cerr << "Unable to open file: " << txt << endl;
+        return;
+    }
+
+    // Zczytanie liczby krawedzi i wierzcholkow z pierwszej linijki pliku tekstowego
+    file >> edges >> vertices;
+
+    // Usunięcie istniejącej macierzy incydencji (zapewnienie braku wycieków pamięci)
+    if(incidenceMatrix != nullptr) {
+        for (int i = 0; i < vertices; ++i) {
+            delete[] incidenceMatrix[i];
+        }
+        delete[] incidenceMatrix;
+    }
+
+    // Inicjalizacja macierzy incydencji
+    incidenceMatrix = new int*[vertices];
+    for (int i = 0; i < vertices; ++i) {
+        incidenceMatrix[i] = new int[edges];
+        std::fill(incidenceMatrix[i], incidenceMatrix[i] + edges, 0);
+    }
+
+
+    // Usuniecie istniejacej listy sasiadow
+    if (adjacencyList != nullptr) {
+        clearAdjacencyList();
+    }
+
+    // Inicjalizacja nowej listy sąsiadów
+    adjacencyList = new List[vertices];
+
+    // Zczytanie krawedzi z kolejnych linijek pliku tekstowego
+    int start, end, weight;
+    for (int i = 0; i < edges; ++i) {
+        file >> start >> end >> weight;
+
+        adjacencyList[start].addEdge(new Edge(end, weight));
+        incidenceMatrix[start][i] = weight;
+
+        if (!directed) {    // graf nieskierowany
+            adjacencyList[end].addEdge(new Edge(start, weight));
+            incidenceMatrix[end][i] = weight;
+        } else {    // graf skierowany
+            incidenceMatrix[end][i] = -weight;
+        }
+    }
+
+    file.close();
+
+    cout << endl << "Graf zostal prawidlowo wczytany." << endl;
+
 }
+
 
 void Graph::generateGraph(bool directed) {
     if (vertices <= 0) return;
@@ -48,7 +103,7 @@ void Graph::generateGraph(bool directed) {
         return;
     }
 
-    // Usunięcie istniejącej macierzy incydencji (zapewnienie braku wycieków pamięci)
+    // Usuniecie istniejacej macierzy incydencji
     if(incidenceMatrix != nullptr) {
         for (int i = 0; i < vertices; ++i) {
             delete[] incidenceMatrix[i];
@@ -63,12 +118,12 @@ void Graph::generateGraph(bool directed) {
         std::fill(incidenceMatrix[i], incidenceMatrix[i] + edges, 0);
     }
 
-    // Usunięcie istniejącej listy sąsiadów (zapewnienie braku wycieków pamięci)
+    // Usuniecie istniejacej listy sasiadow
     if (adjacencyList != nullptr) {
         clearAdjacencyList();
     }
 
-    // Inicjalizacja nowej listy sąsiadów
+    // Inicjalizacja nowej listy sasiadow
     adjacencyList = new List[vertices];
 
     // Utworzenie wektora z kolejnoscia losowa dla wierzcholkow - dla zapewnienia spojnosci grafu skierowanego
@@ -297,18 +352,4 @@ void Graph::showIncidenceMatrix() {
 
     }
 
-}
-
-
-
-
-
-
-
-void Graph::setIncidenceMatrix(int **matrix) {
-    incidenceMatrix = matrix;
-}
-
-void Graph::setEdges(int e) {
-    edges = e;
 }

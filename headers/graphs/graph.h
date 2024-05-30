@@ -18,7 +18,7 @@ class Graph {
 
 public:
     Graph(int v = 0, int d = 0);
-    void loadGraph(string txt);
+    void loadGraph(string txt, bool directed);
     void generateGraph(bool directed);
     int getVertices();
     int getEdges();
@@ -27,11 +27,6 @@ public:
     void clearAdjacencyList();
     void showAdjacencyList();
     void showIncidenceMatrix();
-
-    // na potrzeby testow
-    void setIncidenceMatrix(int **matrix);
-    void setEdges(int e = 0);
-
 
 };
 
