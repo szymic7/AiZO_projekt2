@@ -71,7 +71,8 @@ void BellmanFord::algorithmList() {
     }
 
     // Sprawdzenie na obecność cykli o ujemnej wadze
-    for (int u = 0; u < V; u++) {   // lista dla kazdego wierzcholka
+    // Nie jest to potrzebne, bo jest zalozenie, ze wagi tylko dodatnie
+    /*for (int u = 0; u < V; u++) {   // lista dla kazdego wierzcholka
 
         for (Edge *edge = getGraph()->getAdjacencyList()[u].getFirstEdge(); edge != nullptr; edge = edge->getNext()) {
 
@@ -83,7 +84,7 @@ void BellmanFord::algorithmList() {
                 return;
             }
         }
-    }
+    }*/
 
     // Ustawienie całkowitego kosztu ścieżki
     pathWeightList = d[end];
@@ -165,7 +166,8 @@ void BellmanFord::algorithmMatrix() {
     }
 
     // Sprawdzenie na obecnosc cykli o ujemnej wadze
-    for (u = 0; u < V; u++) {   // lista dla kazdego wierzcholka
+    // Nie jest to potrzebne, bo jest zalozenie, ze wagi tylko dodatnie
+    /*for (u = 0; u < V; u++) {   // lista dla kazdego wierzcholka
 
         for (Edge *edge = getGraph()->getAdjacencyList()[u].getFirstEdge(); edge != nullptr; edge = edge->getNext()) {
 
@@ -177,7 +179,7 @@ void BellmanFord::algorithmMatrix() {
                 return;
             }
         }
-    }
+    }*/
 
     // Ustawienie całkowitego kosztu ścieżki
     pathWeightMatrix = d[end];

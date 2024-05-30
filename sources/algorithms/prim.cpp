@@ -40,6 +40,8 @@ void Prim::algorithmList() {
     std::priority_queue<int, std::vector<int>, decltype(comp)> pq(comp);
     pq.push(start);
 
+
+
     while (!pq.empty()) {
         int u = pq.top();
         pq.pop();
@@ -166,7 +168,7 @@ void Prim::showMstMatrix() {
 
         Edge *current = mstMatrix.getFirstEdge();
 
-        cout << endl << "Minimalne drzewo rozpinajace, znalezione dla reprezentacji listowej grafu:" << endl;
+        cout << endl << "Minimalne drzewo rozpinajace, znalezione dla reprezentacji macierzowej grafu:" << endl;
 
         while(current != nullptr) {
             cout << "(" << p[current->getEnd()] << "-" << current->getEnd() << ": " << current->getWeight() << ")" << endl;

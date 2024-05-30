@@ -4,14 +4,13 @@
 
 class Edge {
 
-    int /*start,*/ end;
+    int end;
     int weight;
     Edge *nextEdge;
 
 public:
-    Edge(int end = -1, int weight = 0);
+    Edge(int e = -1, int w = 0);
     void setNext(Edge *next); // przed wywolaniem trzeba utowrzyc wskaznik na next
-    //void setStart(int s);
     int getEnd();
     int getWeight();
     Edge* getNext();

@@ -222,11 +222,31 @@ void showMenu() {
             case 5: // Drugi algorytm / Zakoncz
 
                 switch(problem) { // akcja w zaleznosci od wybranego problemu grafowego
+
                     case 1: // MST - algorytm Kruskala
 
                         if(graph.getIncidenceMatrix() != nullptr && graph.getAdjacencyList() != nullptr) {
 
-                            // ALGORYTM KRUSKALA
+                            pGraph = &graph;
+                            kruskal.setGraph(pGraph);
+
+                            // Algorytm Kruskala dla reprezentacji listowej grafu
+                            startTime = chrono::high_resolution_clock::now();
+                            kruskal.algorithmList();
+                            endTime = chrono::high_resolution_clock::now();
+                            time = chrono::duration<double, std::milli>(endTime - startTime);
+                            kruskal.showMstList();    // wyswietlenie MST dla reprezentacji listowej
+                            cout << "Czas dzialania algorytmu: " << time.count() << " ms\n" << endl;
+
+                            // Algorytm Kruskala dla reprezentacji macierzowej grafu
+                            startTime = chrono::high_resolution_clock::now();
+                            kruskal.algorithmMatrix();
+                            endTime = chrono::high_resolution_clock::now();
+                            time = chrono::duration<double, std::milli>(endTime - startTime);
+                            kruskal.showMstMatrix();    // wyswietlenie MST dla reprezemtacji macierzowej
+                            cout << "Czas dzialania algorytmu: " << time.count() << " ms" << endl;
+
+                            //break;
 
                         } else {
 

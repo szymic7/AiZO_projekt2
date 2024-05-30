@@ -20,4 +20,8 @@ add_executable(AiZO_projekt2 sources/main/main.cpp
         headers/algorithms/bellmanFord.h
         sources/algorithms/algorithm.cpp
         headers/algorithms/algorithm.h
+        sources/graphs/kruskal/edgeWithStart.cpp
+        headers/graphs/kruskal/edgeWithStart.h
+        sources/graphs/kruskal/listWithStart.cpp
+        headers/graphs/kruskal/listWithStart.h
 )
