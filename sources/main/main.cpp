@@ -1,6 +1,7 @@
 #include <iostream>
 #include <chrono>
 #include <fstream>
+#include <random>
 #include "../../headers/graphs/graph.h"
 #include "../../headers/algorithms/dijkstra.h"
 #include "../../headers/algorithms/bellmanFord.h"
@@ -30,6 +31,10 @@ void showMenu() {
     Kruskal kruskal;
     Dijkstra dijkstra;
     BellmanFord bellmanFord;
+
+    // Inicjalizacja generatora liczb losowych
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine rng(seed);
 
 
     // PIERWSZY POZIOM MENU - WYBOR PROBLEMU DO ROZWIAZANIA
@@ -119,8 +124,8 @@ void showMenu() {
 
                 graph = Graph(vertices, density);
 
-                if(problem == 1) graph.generateGraph(false);    // MST - graf nieskierowany
-                else graph.generateGraph(true); // Najkrotsza droga i max przeplyw - graf skierowany
+                if(problem == 1) graph.generateGraph(false, rng);    // MST - graf nieskierowany
+                else graph.generateGraph(true, rng); // Najkrotsza droga i max przeplyw - graf skierowany
 
                 break;
 
@@ -357,6 +362,289 @@ void showMenu() {
     } while(!quit);
 
 }
+
+
+void pomiaryDijkstra() {
+
+    // Inicjalizacja generatora liczb losowych
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine rng(seed);
+
+    // GRAF - ALOKOWANY DYNAMICZNIE
+    int vertices, density;
+    Graph graph;
+    Graph *pGraph;
+
+    // Algorytm Dijkstry
+    Dijkstra dijkstra;
+
+    // pomiar czasu
+    chrono::high_resolution_clock::time_point startTime, endTime;
+    double time = 0.0;
+
+    // Poczatkowa liczba wierzcholkow - 20; kazda kolejna wieksza o 20
+    vertices = 20;
+
+    // Gestosc 50%
+    density = 25;
+    //graph.setDensity(density);
+
+    int startVertice, endVertice;
+
+    // Pomiary dla 7 reprezentatywnych wartosci liczby wierzcholkow
+    for(int i = 0; i < 7; i++) {
+
+        // Ustawienie liczby krawedzi dla grafu przed pomiarami (po zwiekszeniu liczby krawedzi)
+        //graph.setVertices(vertices);
+        graph = Graph(vertices, density);
+
+        // Wyzerowanie zmiennej time przed kolejnymi 50 pomiarami
+        time = 0.0;
+
+        // 50 pomiarow
+        for (int j = 0; j < 100; j++) {
+
+            // Wygenerowanie grafu
+            graph.generateGraph(true, rng);
+
+            // Przypisanie grafu do obiektu klasy Dijkstra
+            pGraph = &graph;
+            dijkstra.setGraph(pGraph);
+
+            // Wygenerowanie losowego wierzcholka startowego algorytmu
+            startVertice = rng() % vertices;
+
+            // Wygenerowanie losowego wierzcholka koncowego algorytmu (inny niz startowy)
+            do {
+                endVertice = rng() % vertices;
+            } while (endVertice == startVertice);
+
+            dijkstra.setStart(startVertice);
+            dijkstra.setEnd(endVertice);
+
+            // Algorytm dla reprezentacji listowej
+            startTime = chrono::high_resolution_clock::now();
+            dijkstra.algorithmMatrix();
+            endTime = chrono::high_resolution_clock::now();
+            //time += chrono::duration<double, std::milli>(endTime - startTime).count();
+            time += chrono::duration<double, std::micro>(endTime - startTime).count();
+
+        }
+
+        // Obliczenie sredniego czasu z 50 pomiarow
+        cout << endl << "Algorytm Dijkstry, lista sasiadow, gestosc " << density << "%, " << vertices << " wierzcholkow: " << time / 100.0 << " us." << endl;
+
+        // Nastepna liczba wierzcholkow wieksza o 20 od poprzedniej
+        vertices += 20;
+
+    }
+
+
+}
+
+void pomiaryBellmanFord() {
+
+    // Inicjalizacja generatora liczb losowych
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine rng(seed);
+
+    // GRAF - ALOKOWANY DYNAMICZNIE
+    int vertices, density;
+    Graph graph;
+    Graph *pGraph;
+
+    // Algorytm Bellmana Forda
+    BellmanFord bellmanFord;
+
+    // pomiar czasu
+    chrono::high_resolution_clock::time_point startTime, endTime;
+    double time = 0.0;
+
+    // Poczatkowa liczba wierzcholkow - 20; kazda kolejna wieksza o 20
+    vertices = 20;
+
+    // Gestosc: 25, 50, 99%
+    density = 99;
+    //graph.setDensity(density);
+
+    int startVertice, endVertice;
+
+    // Pomiary dla 7 reprezentatywnych wartosci liczby wierzcholkow
+    for(int i = 0; i < 7; i++) {
+
+        // Ustawienie liczby krawedzi dla grafu przed pomiarami (po zwiekszeniu liczby krawedzi)
+        //graph.setVertices(vertices);
+        graph = Graph(vertices, density);
+
+        // Wyzerowanie zmiennej time przed kolejnymi 50 pomiarami
+        time = 0.0;
+
+        // 50 pomiarow
+        for (int j = 0; j < 100; j++) {
+
+            // Wygenerowanie grafu
+            graph.generateGraph(true, rng);
+
+            // Przypisanie grafu do obiektu klasy Dijkstra
+            pGraph = &graph;
+            bellmanFord.setGraph(pGraph);
+
+            // Wygenerowanie losowego wierzcholka startowego algorytmu
+            startVertice = rng() % vertices;
+
+            // Wygenerowanie losowego wierzcholka koncowego algorytmu (inny niz startowy)
+            do {
+                endVertice = rng() % vertices;
+            } while (endVertice == startVertice);
+
+            bellmanFord.setStart(startVertice);
+            bellmanFord.setEnd(endVertice);
+
+            // Algorytm dla reprezentacji listowej
+            startTime = chrono::high_resolution_clock::now();
+            bellmanFord.algorithmList();
+            endTime = chrono::high_resolution_clock::now();
+            //time += chrono::duration<double, std::milli>(endTime - startTime).count();
+            time += chrono::duration<double, std::micro>(endTime - startTime).count();
+
+        }
+
+        // Obliczenie sredniego czasu z 50 pomiarow
+        cout << endl << "Algorytm Bellmana-Forda, lista sasiadow, gestosc " << density << "%, " << vertices << " wierzcholkow: " << time / 100.0 << " us." << endl;
+
+        // Nastepna liczba wierzcholkow wieksza o 20 od poprzedniej
+        vertices += 20;
+
+    }
+
+}
+
+void pomiaryPrim() {
+
+    // Inicjalizacja generatora liczb losowych
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine rng(seed);
+
+    // GRAF - ALOKOWANY DYNAMICZNIE
+    int vertices, density;
+    Graph graph;
+    Graph *pGraph;
+
+    // Algorytm Kruskala
+    Prim prim;
+
+    // pomiar czasu
+    chrono::high_resolution_clock::time_point startTime, endTime;
+    double time = 0.0;
+
+    // Poczatkowa liczba wierzcholkow - 20; kazda kolejna wieksza o 20
+    vertices = 20;
+
+    // Gestosc: 25, 50, 99%
+    density = 25;
+
+    // Pomiary dla 7 reprezentatywnych wartosci liczby wierzcholkow
+    for(int i = 0; i < 7; i++) {
+
+        // Ustawienie liczby krawedzi dla grafu przed pomiarami (po zwiekszeniu liczby krawedzi)
+        graph = Graph(vertices, density);
+
+        // Wyzerowanie zmiennej time przed kolejnymi 50 pomiarami
+        time = 0.0;
+
+        // 50 pomiarow
+        for (int j = 0; j < 100; j++) {
+
+            // Wygenerowanie grafu
+            graph.generateGraph(false, rng); // algorytm MST - graf nieskierowany
+
+            // Przypisanie grafu do obiektu klasy Dijkstra
+            pGraph = &graph;
+            prim.setGraph(pGraph);
+
+            prim.setStart(rng() % vertices);
+
+            // Algorytm dla reprezentacji listowej
+            startTime = chrono::high_resolution_clock::now();
+            prim.algorithmMatrix();
+            endTime = chrono::high_resolution_clock::now();
+            //time += chrono::duration<double, std::milli>(endTime - startTime).count();
+            time += chrono::duration<double, std::micro>(endTime - startTime).count();
+
+        }
+
+        // Obliczenie sredniego czasu z 50 pomiarow
+        cout << endl << "Algorytm Prima, macierz incydencji, gestosc " << density << "%, " << vertices << " wierzcholkow: " << time / 100.0 << " us." << endl;
+
+        // Nastepna liczba wierzcholkow wieksza o 20 od poprzedniej
+        vertices += 20;
+
+    }
+
+}
+
+void pomiaryKruskal() {
+
+    // Inicjalizacja generatora liczb losowych
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine rng(seed);
+
+    // GRAF - ALOKOWANY DYNAMICZNIE
+    int vertices, density;
+    Graph graph;
+    Graph *pGraph;
+
+    // Algorytm Kruskala
+    Kruskal kruskal;
+
+    // pomiar czasu
+    chrono::high_resolution_clock::time_point startTime, endTime;
+    double time = 0.0;
+
+    // Poczatkowa liczba wierzcholkow - 20; kazda kolejna wieksza o 20
+    vertices = 20;
+
+    // Gestosc: 25, 50, 99%
+    density = 99;
+
+    // Pomiary dla 7 reprezentatywnych wartosci liczby wierzcholkow
+    for(int i = 0; i < 7; i++) {
+
+        // Ustawienie liczby krawedzi dla grafu przed pomiarami (po zwiekszeniu liczby krawedzi)
+        graph = Graph(vertices, density);
+
+        // Wyzerowanie zmiennej time przed kolejnymi 50 pomiarami
+        time = 0.0;
+
+        // 50 pomiarow
+        for (int j = 0; j < 100; j++) {
+
+            // Wygenerowanie grafu
+            graph.generateGraph(false, rng);    // algorytm MST - graf nieskierowany
+
+            // Przypisanie grafu do obiektu klasy Dijkstra
+            pGraph = &graph;
+            kruskal.setGraph(pGraph);
+
+            // Algorytm dla reprezentacji listowej
+            startTime = chrono::high_resolution_clock::now();
+            kruskal.algorithmList();
+            endTime = chrono::high_resolution_clock::now();
+            //time += chrono::duration<double, std::milli>(endTime - startTime).count();
+            time += chrono::duration<double, std::micro>(endTime - startTime).count();
+
+        }
+
+        // Obliczenie sredniego czasu z 50 pomiarow
+        cout << endl << "Algorytm Kruskala, lista, gestosc " << density << "%, " << vertices << " wierzcholkow: " << time / 100.0 << " us." << endl;
+
+        // Nastepna liczba wierzcholkow wieksza o 20 od poprzedniej
+        vertices += 20;
+
+    }
+
+}
+
 
 
 int main() {

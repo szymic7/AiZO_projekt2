@@ -1,4 +1,5 @@
 #include <iostream>
+#include <random>
 #include "list.h"
 
 
@@ -18,8 +19,10 @@ class Graph {
 
 public:
     Graph(int v = 0, int d = 0);
+    void setVertices(int v);
+    void setDensity(int d);
     void loadGraph(string txt, bool directed);
-    void generateGraph(bool directed);
+    void generateGraph(bool directed, std::default_random_engine& rng);
     int getVertices();
     int getEdges();
     List *getAdjacencyList();

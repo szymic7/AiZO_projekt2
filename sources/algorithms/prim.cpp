@@ -1,6 +1,7 @@
 #include <vector>
 #include <limits>
 #include <queue>
+#include <set>
 #include "../../headers/algorithms/prim.h"
 
 Prim::Prim() : Algorithm() {
@@ -71,7 +72,6 @@ void Prim::algorithmList() {
 
 
 void Prim::algorithmMatrix() {
-
     // Wyczyszczenie istniejącej listy MST
     mstMatrix.clear();
     delete[] p;
@@ -99,36 +99,32 @@ void Prim::algorithmMatrix() {
 
         inMST[u] = true;
 
-        for (int j = 0; j < E; j++) {   // szukamy krawedzi wychodzacych z u
-
-            // Sprawdzamy po kolei kazda krawedz, czy wychodzi z u
+        // Iteracja po krawędziach wychodzących z wierzchołka u
+        for (int j = 0; j < E; j++) {
             int weight = getGraph()->getIncidenceMatrix()[u][j];
-            if (weight > 0) {   // znaleziona krawedz wychodzaca z u - szukamy v w j-tej kolumnie
-
+            if (weight > 0) {
+                // Znalezienie wierzchołka v połączonego z u
                 int v = -1;
-                for (int k = 0; k < V; ++k) {   // wszystkie wiersze w kolumnie j - szukamy v
-                    if (k != u && getGraph()->getIncidenceMatrix()[k][j] == weight) {
+                for (int k = 0; k < V; ++k) {
+                    if (getGraph()->getIncidenceMatrix()[k][j] == weight && k != u) {
                         v = k;
                         break;
                     }
                 }
-
                 if (v != -1 && !inMST[v] && key[v] > weight) {
                     key[v] = weight;
                     p[v] = u;
                     pq.push(v);
                 }
-
             }
-
         }
-
     }
 
+    // Dodanie krawędzi do MST i obliczenie sumy wag krawędzi
     for (int v = 0; v < V; v++) {
-        if (p[v] != -1) {   // warunek nie bedzie spelniony tylko dla wierzcholka startowego
+        if (p[v] != -1) {
             mstWeightMatrix += key[v];
-            mstMatrix.addEdge(new Edge(v, key[v]));
+            mstMatrix.addEdgeFront(new Edge(v, key[v]));
         }
     }
 

@@ -70,21 +70,6 @@ void BellmanFord::algorithmList() {
 
     }
 
-    // Sprawdzenie na obecność cykli o ujemnej wadze
-    // Nie jest to potrzebne, bo jest zalozenie, ze wagi tylko dodatnie
-    /*for (int u = 0; u < V; u++) {   // lista dla kazdego wierzcholka
-
-        for (Edge *edge = getGraph()->getAdjacencyList()[u].getFirstEdge(); edge != nullptr; edge = edge->getNext()) {
-
-            int v = edge->getEnd();
-            int weight = edge->getWeight();
-
-            if (d[u] != std::numeric_limits<int>::max() && d[v] > d[u] + weight) {
-                std::cerr << "Graf zawiera cykl o ujemnej wadze" << std::endl;
-                return;
-            }
-        }
-    }*/
 
     // Ustawienie całkowitego kosztu ścieżki
     pathWeightList = d[end];
@@ -164,22 +149,6 @@ void BellmanFord::algorithmMatrix() {
         relaxation_count = 0;
 
     }
-
-    // Sprawdzenie na obecnosc cykli o ujemnej wadze
-    // Nie jest to potrzebne, bo jest zalozenie, ze wagi tylko dodatnie
-    /*for (u = 0; u < V; u++) {   // lista dla kazdego wierzcholka
-
-        for (Edge *edge = getGraph()->getAdjacencyList()[u].getFirstEdge(); edge != nullptr; edge = edge->getNext()) {
-
-            v = edge->getEnd();
-            weight = edge->getWeight();
-
-            if (d[u] != std::numeric_limits<int>::max() && d[v] > d[u] + weight) {
-                std::cerr << "Graf zawiera cykl o ujemnej wadze" << std::endl;
-                return;
-            }
-        }
-    }*/
 
     // Ustawienie całkowitego kosztu ścieżki
     pathWeightMatrix = d[end];

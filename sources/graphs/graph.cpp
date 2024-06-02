@@ -19,6 +19,16 @@ Graph::Graph(int v, int d) {
 }
 
 
+void Graph::setVertices(int v) {
+    vertices = v;
+}
+
+
+void Graph::setDensity(int d) {
+    density = d;
+}
+
+
 void Graph::loadGraph(string txt, bool directed) {
     ifstream file(txt);
     if (!file.is_open()) {
@@ -76,7 +86,7 @@ void Graph::loadGraph(string txt, bool directed) {
 }
 
 
-void Graph::generateGraph(bool directed) {
+/*void Graph::generateGraph(bool directed) {
     if (vertices <= 0) return;
 
     // Inicjalizacja generatora liczb losowych
@@ -236,53 +246,165 @@ void Graph::generateGraph(bool directed) {
     }
 
     cout << endl << "Graf zostal pomyslnie utworzony." << endl;
-}
+}*/
 
-    /*while (edgeCount < edges) {
-        if (edgeCount < vertices - 1) {
-            // Drzewo rozpinające
-            int u = connectedVertices[rand() % connectedVertices.size()];
-            int v = rand() % vertices;
+void Graph::generateGraph(bool directed, std::default_random_engine& rng) {
+    if (vertices <= 0) return;
+
+    // Obliczenie maksymalnej liczby krawędzi dla grafu skierowanego V*(V-1) i nieskierowanego: V*(V-1)/2
+    int maxEdges = directed ? vertices * (vertices - 1) : vertices * (vertices - 1) / 2;
+
+    // Obliczenie liczby krawedzi dla podanej gestosci
+    edges = maxEdges * density / 100;
+
+    // Obliczenie minimalnej liczby krawedzi do utworzenia grafu spojnego skierowanego: V i nieskierowanwgo: V-1
+    int minEdges = directed ? vertices : vertices - 1;
+
+    // Sprawdzenie, czy liczba krawedzi jest wystarczajaca do spojności
+    if (edges < minEdges) {
+        cout << endl << "Dla podanej gestosci i liczby wierzcholkow nie mozna utworzyc spojnego grafu.";
+        cout << "\nGraf nie zostal utworzony. Sprobuj ponownie dla innych wartosci parametrow." << endl;
+        edges = 0;
+        return;
+    }
+
+    // Usuniecie istniejacej macierzy incydencji
+    if(incidenceMatrix != nullptr) {
+        for (int i = 0; i < vertices; ++i) {
+            delete[] incidenceMatrix[i];
+        }
+        delete[] incidenceMatrix;
+    }
+
+    // Inicjalizacja macierzy incydencji
+    incidenceMatrix = new int*[vertices];
+    for (int i = 0; i < vertices; ++i) {
+        incidenceMatrix[i] = new int[edges];
+        std::fill(incidenceMatrix[i], incidenceMatrix[i] + edges, 0);
+    }
+
+    // Usuniecie istniejacej listy sasiadow
+    if (adjacencyList != nullptr) {
+        clearAdjacencyList();
+    }
+
+    // Inicjalizacja nowej listy sasiadow
+    adjacencyList = new List[vertices];
+
+    // Utworzenie wektora z kolejnoscia losowa dla wierzcholkow - dla zapewnienia spojnosci grafu skierowanego
+    std::vector<int> randomOrder(vertices);
+    for (int i = 0; i < vertices; ++i) {
+        randomOrder[i] = i;
+    }
+    std::shuffle(randomOrder.begin(), randomOrder.end(), rng);
+
+    // Lista możliwych krawędzi
+    std::vector<std::pair<int, int>> possibleEdges;
+    for (int i = 0; i < vertices; ++i) {
+        for (int j = 0; j < vertices; ++j) {
+            if (!directed && j > i) {   // graf nieskierowany
+                possibleEdges.emplace_back(i, j);
+            } else if (directed && i != j) {   // graf skierowany
+                possibleEdges.emplace_back(i, j);
+            }
+        }
+    }
+
+    // Utrzymanie spójności grafu
+    std::vector<bool> connected(vertices, false);
+    std::vector<int> connectedVertices;
+    connectedVertices.push_back(0);
+    connected[0] = true;
+
+    int edgeCount = 0;
+
+    if(directed) {  // graf skierowany
+
+        // Utworzenie cyklu zawierajacego wszystkie wierzcholki w celu zapewnienia spojnosci
+        for (int i = 0; i < vertices; ++i) {
+            int u = randomOrder[i];
+            int v = randomOrder[(i + 1) % vertices];
+
+            // Dodanie krawędzi
+            int weight = rng() % 20 + 1;
+            Edge *newEdgeU = new Edge(v, weight);
+            adjacencyList[u].addEdge(newEdgeU);
+
+            incidenceMatrix[u][edgeCount] = weight;
+            incidenceMatrix[v][edgeCount] = -weight; // graf skierowany
+
+            edgeCount++;
+
+            // Usun dodana krawedz z listy mozliwych krawedzi
+            possibleEdges.erase(std::remove(possibleEdges.begin(), possibleEdges.end(), std::make_pair(u, v)), possibleEdges.end());
+        }
+
+
+    } else {    // graf nieskierowany
+
+        // Dodawanie krawedzi w celu zapewnienia spojnosci
+        while (edgeCount < minEdges) {
+            int u = connectedVertices[rng() % connectedVertices.size()];
+            int v = rng() % vertices;
             while (connected[v]) {
-                v = rand() % vertices;
+                v = rng() % vertices;
             }
             connected[v] = true;
             connectedVertices.push_back(v);
 
-            // Dodanie krawędzi
-            int weight = rand() % 20 + 1;
+            // Dodanie krawedzi
+            int weight = rng() % 20 + 1;
             Edge *newEdgeU = new Edge(v, weight);
-            Edge *newEdgeV = new Edge(u, weight);
-
             adjacencyList[u].addEdge(newEdgeU);
+
+            Edge *newEdgeV = new Edge(u, weight);
             adjacencyList[v].addEdge(newEdgeV);
 
             incidenceMatrix[u][edgeCount] = weight;
-            incidenceMatrix[v][edgeCount] = -weight;
+            incidenceMatrix[v][edgeCount] = weight;  // graf nieskierowany
+
             edgeCount++;
-        } else {
-            // Losowe krawędzie
-            int randomIndex = rand() % possibleEdges.size();
-            int u = possibleEdges[randomIndex].first;
-            int v = possibleEdges[randomIndex].second;
-            std::swap(possibleEdges[randomIndex], possibleEdges.back());
-            possibleEdges.pop_back();
 
-            if (adjacencyList[u].findEdge(v) == nullptr) {
-                int weight = rand() % 20 + 1;
-                Edge *newEdgeU = new Edge(v, weight);
-                Edge *newEdgeV = new Edge(u, weight);
-
-                adjacencyList[u].addEdge(newEdgeU);
-                adjacencyList[v].addEdge(newEdgeV);
-
-                incidenceMatrix[u][edgeCount] = weight;
-                incidenceMatrix[v][edgeCount] = -weight;
-                edgeCount++;
-            }
+            // Usun dodana krawedz z listy mozliwych krawedzi
+            possibleEdges.erase(std::remove(possibleEdges.begin(), possibleEdges.end(), std::make_pair(u, v)), possibleEdges.end());
         }
-    }*/
-//}
+
+    }
+
+
+    // Dodawanie losowych krawędzi do osiągnięcia docelowej liczby krawędzi
+    while (edgeCount < edges && !possibleEdges.empty()) {
+        int randomIndex = rng() % possibleEdges.size();
+        int u = possibleEdges[randomIndex].first;
+        int v = possibleEdges[randomIndex].second;
+        std::swap(possibleEdges[randomIndex], possibleEdges.back());
+        possibleEdges.pop_back();
+
+        if (adjacencyList[u].findEdge(v) == nullptr) {
+            int weight = rng() % 20 + 1;
+            Edge *newEdgeU = new Edge(v, weight);
+            adjacencyList[u].addEdge(newEdgeU);
+
+            if (!directed) {
+                Edge *newEdgeV = new Edge(u, weight);
+                adjacencyList[v].addEdge(newEdgeV);
+            }
+
+            incidenceMatrix[u][edgeCount] = weight;
+            if (directed) {
+                incidenceMatrix[v][edgeCount] = -weight; // graf skierowany
+            } else {
+                incidenceMatrix[v][edgeCount] = weight;  // graf nieskierowany
+            }
+            edgeCount++;
+        }
+    }
+
+    //cout << endl << "Graf zostal pomyslnie utworzony." << endl;
+}
+
+
+
 
 int Graph::getVertices() {
     return vertices;
