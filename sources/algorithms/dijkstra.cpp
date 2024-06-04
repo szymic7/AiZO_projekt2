@@ -189,29 +189,10 @@ void Dijkstra::showPathList() {
         cout << endl << "Calkowity koszt sciezki = " << pathWeightList << endl;
 
     } else {    // jesli najkrotsza sciezka jest pusta
+
         cout << endl << "Uruchom algorytm, aby znalezc najkrotsza sciezke." << endl;
+
     }
-
-    /*if(pathList.getFirstEdge() != nullptr) { // jesli najkrotsza sciezka nie jest pusta
-
-        // Pierwsza krawedzia na liscie jest ostatnia krawedzia sciezki
-        Edge *current = pathList.getFirstEdge();
-
-        cout << "Znaleziona najktorsza sciezka dla reprezentacji listowej, w kolejnosci od konca do poczatku sciezki:" << endl;
-
-        // Wyswietlenie krawedzi w formacie: (u-v: w)
-        while(current->getNext() != nullptr) {
-            cout << "(" << current->getNext()->getEnd() << "-" << current->getEnd() << ": " << current->getWeight() << ")" << endl;
-            current = current->getNext(); // ustawienie nastepnej krawedzi
-        }
-
-        cout << "(" << start << "-" << current->getEnd() << ": " << current->getWeight() << ")" << endl;
-
-        cout << endl << "Calkowity koszt sciezki = " << pathWeightList << endl;
-
-    } else {    // jesli najkrotsza sciezka jest pusta
-        cout << endl << "Uruchom algorytm, aby znalezc najkrotsza sciezke." << endl;
-    }*/
 
 }
 
@@ -239,26 +220,5 @@ void Dijkstra::showPathMatrix() {
     } else {    // jesli najkrotsza sciezka jest pusta
         cout << endl << "Uruchom algorytm, aby znalezc najkrotsza sciezke." << endl;
     }
-
-    /*if(pathMatrix.getFirstEdge() != nullptr) { // jesli najkrotsza sciezka nie jest pusta
-
-        // Pierwsza krawedzia na liscie jest ostatnia krawedzia sciezki
-        Edge *current = pathMatrix.getFirstEdge();
-
-        cout << "Znaleziona najktorsza sciezka dla reprezentacji listowej, w kolejnosci od konca do poczatku sciezki:" << endl;
-
-        // Wyswietlenie krawedzi w formacie: (u-v: w)
-        while(current->getNext() != nullptr) {
-            cout << "(" << current->getNext()->getEnd() << "-" << current->getEnd() << ": " << current->getWeight() << ")" << endl;
-            current = current->getNext(); // ustawienie nastepnej krawedzi
-        }
-
-        cout << "(" << start << "-" << current->getEnd() << ": " << current->getWeight() << ")" << endl;
-
-        cout << endl << "Calkowity koszt sciezki = " << pathWeightMatrix << endl;
-
-    } else {    // jesli najkrotsza sciezka jest pusta
-        cout << endl << "Uruchom algorytm, aby znalezc najkrotsza sciezke." << endl;
-    }*/
 
 }

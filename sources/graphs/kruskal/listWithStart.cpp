@@ -54,6 +54,7 @@ void ListWithStart::printList() {
 
 
 void ListWithStart::clear() {
+
     EdgeWithStart *current = firstEdge;
     while (current != nullptr) {
         EdgeWithStart *temp = current;
@@ -61,4 +62,5 @@ void ListWithStart::clear() {
         delete temp;
     }
     firstEdge = nullptr;
+
 }

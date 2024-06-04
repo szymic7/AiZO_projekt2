@@ -12,6 +12,10 @@ using namespace std;
 
 void showMenu() {
 
+    // INICJALIZACJA GENERATORA LICZB LOSOWYCH
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine rng(seed);
+
     // ZMIENNE POMOCNICZE - DO POBIERANIA INPUTU OD UZYTKOWNIKA
     int problem = 0, choice = 0;
     bool quit = false;
@@ -32,10 +36,6 @@ void showMenu() {
     Dijkstra dijkstra;
     BellmanFord bellmanFord;
 
-    // Inicjalizacja generatora liczb losowych
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-    std::default_random_engine rng(seed);
-
 
     // PIERWSZY POZIOM MENU - WYBOR PROBLEMU DO ROZWIAZANIA
     do {
@@ -43,11 +43,10 @@ void showMenu() {
         cout << "----------------------------------------------------------------------------------" << endl;
         cout << "1) Wyznaczanie minimalnego drzewa rozpinajacego (MST) - algorytmy Prima i Kruskala" << endl;
         cout << "2) Wyznaczanie najkrotszej sciezki w grafie - algorytmy Dijkstry i Bellmana-Forda" << endl;
-        cout << "3) Wyznaczanie maksymalnego przeplywu - algorytm Forda-Fulkersona" << endl;
         cout << "Wybor:";
         cin >> problem;
 
-        if(problem < 1 || problem > 3) {
+        if(problem < 1 || problem > 2) {
             cout << endl << "Nieprawidlowy numer wybranej opcji. Sprobuj ponownie." << endl;
             problem = 0;
         }
@@ -67,18 +66,17 @@ void showMenu() {
             case 1: // MST
                 cout << "4) Wykonaj algorytm Prima na ostatnio utworzonym grafie " << endl;
                 cout << "5) Wykonaj algorytm Kruskala na ostatnio utworzonym grafie " << endl;
-                cout << "6) Zakoncz" << endl;
                 break;
             case 2: // Najkrotsza sciezka w grafie
                 cout << "4) Wykonaj algorytm Dijkstry na ostatnio utworzonym grafie " << endl;
                 cout << "5) Wykonaj algorytm Bellmana-Forda na ostatnio utworzonym grafie " << endl;
-                cout << "6) Zakoncz" << endl;
                 break;
-            case 3: // Wyznaczanie maksymalnego przeplywu
-                cout << "4) Wykonaj algorytm Forda-Fulkersona na ostatnio utworzonym grafie " << endl;
-                cout << "5) Zakoncz" << endl;
+            default:
+                cout << endl << "Wystapil blad." << endl;
+                break;
         }
 
+        cout << "6) Zakoncz" << endl;
         cout << "Wybor:";
         cin >> choice;
 
@@ -125,7 +123,7 @@ void showMenu() {
                 graph = Graph(vertices, density);
 
                 if(problem == 1) graph.generateGraph(false, rng);    // MST - graf nieskierowany
-                else graph.generateGraph(true, rng); // Najkrotsza droga i max przeplyw - graf skierowany
+                else graph.generateGraph(true, rng); // Najkrotsza droga - graf skierowany
 
                 break;
 
@@ -145,6 +143,7 @@ void showMenu() {
                 if(graph.getIncidenceMatrix() != nullptr && graph.getAdjacencyList() != nullptr) {
 
                     switch (problem) { // akcja w zaleznosci od wybranego problemu grafowego
+
                         case 1: // MST - algorytm Prima
 
                             // Ustawienie wierzcholka startowego
@@ -178,13 +177,13 @@ void showMenu() {
 
                             break;
 
-                        case 2: {   // Najkrotsza sciezka - algorytm Dijkstry
+                        case 2:   // Najkrotsza sciezka - algorytm Dijkstry
 
                             // Ustawienie wierzcholka poczatkowego
                             cout << endl << "Podaj wierzcholek poczatkowy:";
                             cin >> start;
                             while (start < 0 || start >= graph.getVertices()) {
-                                cout << "Nieprawidlowy numer wierzcholka startowego." << endl;
+                                cout << endl << "Nieprawidlowy numer wierzcholka startowego." << endl;
                                 cout << "Podaj poprawny wierzcholek poczatkowy:";
                                 cin >> start;
                             }
@@ -194,7 +193,7 @@ void showMenu() {
                             cout << "Podaj wierzcholek koncowy (rozny od wierzcholka poczatkowego):";
                             cin >> end;
                             while (end < 0 || end >= graph.getVertices() || end == start) {
-                                cout << "Nieprawidlowy numer wierzcholka koncowego." << endl;
+                                cout << endl << "Nieprawidlowy numer wierzcholka koncowego." << endl;
                                 cout << "Podaj poprawny wierzcholek koncowy:";
                                 cin >> end;
                             }
@@ -222,13 +221,6 @@ void showMenu() {
 
                             break;
 
-                        }
-
-                        case 3: // Maksymalny przeplyw - algorytm Forda-Fulkersona
-
-                            // ALGORYTM FORDA-FULKERSONA
-                            break;
-
                         default:
 
                             cout << endl << "Wystapil blad. Wybierz opcje ponownie." << endl;
@@ -243,13 +235,13 @@ void showMenu() {
 
                 break;
 
-            case 5: // Drugi algorytm / Zakoncz
+            case 5: // Drugi algorytm
 
-                switch(problem) { // akcja w zaleznosci od wybranego problemu grafowego
+                if(graph.getIncidenceMatrix() != nullptr && graph.getAdjacencyList() != nullptr) {
 
-                    case 1: // MST - algorytm Kruskala
+                    switch (problem) { // akcja w zaleznosci od wybranego problemu grafowego
 
-                        if(graph.getIncidenceMatrix() != nullptr && graph.getAdjacencyList() != nullptr) {
+                        case 1: // MST - algorytm Kruskala
 
                             pGraph = &graph;
                             kruskal.setGraph(pGraph);
@@ -270,25 +262,15 @@ void showMenu() {
                             kruskal.showMstMatrix();    // wyswietlenie MST dla reprezemtacji macierzowej
                             cout << "Czas dzialania algorytmu: " << time.count() << " ms" << endl;
 
-                            //break;
+                            break;
 
-                        } else {
-
-                            cout << endl << "Utworz graf, aby wykonac algorytm." << endl;
-
-                        }
-
-                        break;
-
-                    case 2: // Najkrotsza sciezka - algorytm Bellmana-Forda
-
-                        if(graph.getIncidenceMatrix() != nullptr && graph.getAdjacencyList() != nullptr) {
+                        case 2: // Najkrotsza sciezka - algorytm Bellmana-Forda
 
                             // Ustawienie wierzcholka poczatkowego
                             cout << endl << "Podaj wierzcholek poczatkowy:";
                             cin >> start;
                             while (start < 0 || start >= graph.getVertices()) {
-                                cout << "Nieprawidlowy numer wierzcholka startowego." << endl;
+                                cout << endl << "Nieprawidlowy numer wierzcholka startowego." << endl;
                                 cout << "Podaj poprawny wierzcholek poczatkowy:";
                                 cin >> start;
                             }
@@ -298,7 +280,7 @@ void showMenu() {
                             cout << "Podaj wierzcholek koncowy (rozny od wierzcholka poczatkowego):";
                             cin >> end;
                             while (end < 0 || end >= graph.getVertices() || end == start) {
-                                cout << "Nieprawidlowy numer wierzcholka koncowego." << endl;
+                                cout << endl << "Nieprawidlowy numer wierzcholka koncowego." << endl;
                                 cout << "Podaj poprawny wierzcholek koncowy:";
                                 cin >> end;
                             }
@@ -324,45 +306,40 @@ void showMenu() {
                             bellmanFord.showPathMatrix();    // wyswietlenie najkrotszej sciezki dla reprezemtacji listowej
                             cout << "Czas dzialania algorytmu: " << time.count() << " ms" << endl;
 
-                        } else {
+                            break;
 
-                            cout << endl << "Utworz graf, aby wykonac algorytm." << endl;
+                        default:
 
-                        }
+                            cout << endl << "Wystapil blad. Wybierz opcje ponownie." << endl;
+                            break;
+                    }
 
-                        break;
+                } else {
 
+                    cout << endl << "Utworz graf, aby wykonac algorytm." << endl;
 
-                    case 3: // Maksymalny przeplyw - Zakoncz
-
-                        quit = true;
-                        break;
-
-                    default:
-
-                        cout << endl << "Wystapil blad. Wybierz opcje ponownie." << endl;
-                        break;
                 }
+
                 break;
 
-            case 6: // Zakoncz / niepoprawny numer
+            case 6: // Zakoncz
 
-                if(problem == 1 || problem == 2) // MST i Najkrotsza sciezka
-                    quit = true;
-                else // Maksymalny przeplyw
-                    cout << endl << "Niepoprawny numer wybranej opcji. Wybierz ponownie." << endl;
+                quit = true;
                 break;
 
             default:
 
                 cout << endl << "Niepoprawny numer wybranej opcji. Wybierz ponownie." << endl;
                 break;
+
         }
 
     } while(!quit);
 
 }
 
+
+// FUNKCJE DO POMIAROW SREDNIEGO CZASU WYKONYWANIA ALGORYTMOW
 
 void pomiaryDijkstra() {
 
@@ -483,7 +460,7 @@ void pomiaryBellmanFord() {
         for (int j = 0; j < 100; j++) {
 
             // Wygenerowanie grafu
-            graph.generateGraph(true, rng);
+            graph.generateGraph(true, rng); // najkrotsza sciezka - graf skierowany
 
             // Przypisanie grafu do obiektu klasy Dijkstra
             pGraph = &graph;
@@ -605,7 +582,7 @@ void pomiaryKruskal() {
     vertices = 20;
 
     // Gestosc: 25, 50, 99%
-    density = 99;
+    density = 50;
 
     // Pomiary dla 7 reprezentatywnych wartosci liczby wierzcholkow
     for(int i = 0; i < 7; i++) {

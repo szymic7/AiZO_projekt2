@@ -60,7 +60,7 @@ void Kruskal::algorithmList() {
     mstWeightList = 0;
 
     // Licznik krawedzi dodanych do MST
-    //int mstEdges = 0;
+    int mstEdges = 0;
 
     for (EdgeWithStart* edge : edges) {
         int u = edge->getStart();
@@ -70,9 +70,9 @@ void Kruskal::algorithmList() {
         if (findSet(u, parent) != findSet(v, parent)) { // jesli u i v naleza do roznych zbiorow
             mstList.addEdge(new EdgeWithStart(u, v, weight));   // dodanie krawedzi do rozwiazania
             mstWeightList += weight;    // dodanie wagi krawedzi do calkowitej wagi MST
-            //mstEdges++;
+            mstEdges++;
             unionSets(u, v, parent, rank);  // polaczenie zbiorow u i v
-            //if(mstEdges >= V-1) break;  // jesli drzewo MST ma juz V-1 krawedzi - koniec algorytmu
+            if(mstEdges >= V-1) break;  // jesli drzewo MST ma juz V-1 krawedzi - koniec algorytmu
         }
     }
 
