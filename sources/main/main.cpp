@@ -364,7 +364,6 @@ void pomiaryDijkstra() {
 
     // Gestosc 50%
     density = 25;
-    //graph.setDensity(density);
 
     int startVertice, endVertice;
 
@@ -372,13 +371,12 @@ void pomiaryDijkstra() {
     for(int i = 0; i < 7; i++) {
 
         // Ustawienie liczby krawedzi dla grafu przed pomiarami (po zwiekszeniu liczby krawedzi)
-        //graph.setVertices(vertices);
         graph = Graph(vertices, density);
 
         // Wyzerowanie zmiennej time przed kolejnymi 50 pomiarami
         time = 0.0;
 
-        // 50 pomiarow
+        // 100 pomiarow
         for (int j = 0; j < 100; j++) {
 
             // Wygenerowanie grafu
@@ -408,7 +406,7 @@ void pomiaryDijkstra() {
 
         }
 
-        // Obliczenie sredniego czasu z 50 pomiarow
+        // Obliczenie sredniego czasu z 100 pomiarow
         cout << endl << "Algorytm Dijkstry, lista sasiadow, gestosc " << density << "%, " << vertices << " wierzcholkow: " << time / 100.0 << " us." << endl;
 
         // Nastepna liczba wierzcholkow wieksza o 20 od poprzedniej
@@ -442,7 +440,6 @@ void pomiaryBellmanFord() {
 
     // Gestosc: 25, 50, 99%
     density = 99;
-    //graph.setDensity(density);
 
     int startVertice, endVertice;
 
@@ -450,13 +447,12 @@ void pomiaryBellmanFord() {
     for(int i = 0; i < 7; i++) {
 
         // Ustawienie liczby krawedzi dla grafu przed pomiarami (po zwiekszeniu liczby krawedzi)
-        //graph.setVertices(vertices);
         graph = Graph(vertices, density);
 
         // Wyzerowanie zmiennej time przed kolejnymi 50 pomiarami
         time = 0.0;
 
-        // 50 pomiarow
+        // 100 pomiarow
         for (int j = 0; j < 100; j++) {
 
             // Wygenerowanie grafu
@@ -486,7 +482,7 @@ void pomiaryBellmanFord() {
 
         }
 
-        // Obliczenie sredniego czasu z 50 pomiarow
+        // Obliczenie sredniego czasu z 100 pomiarow
         cout << endl << "Algorytm Bellmana-Forda, lista sasiadow, gestosc " << density << "%, " << vertices << " wierzcholkow: " << time / 100.0 << " us." << endl;
 
         // Nastepna liczba wierzcholkow wieksza o 20 od poprzedniej
@@ -529,7 +525,7 @@ void pomiaryPrim() {
         // Wyzerowanie zmiennej time przed kolejnymi 50 pomiarami
         time = 0.0;
 
-        // 50 pomiarow
+        // 100 pomiarow
         for (int j = 0; j < 100; j++) {
 
             // Wygenerowanie grafu
@@ -550,7 +546,7 @@ void pomiaryPrim() {
 
         }
 
-        // Obliczenie sredniego czasu z 50 pomiarow
+        // Obliczenie sredniego czasu z 100 pomiarow
         cout << endl << "Algorytm Prima, macierz incydencji, gestosc " << density << "%, " << vertices << " wierzcholkow: " << time / 100.0 << " us." << endl;
 
         // Nastepna liczba wierzcholkow wieksza o 20 od poprzedniej
@@ -593,7 +589,7 @@ void pomiaryKruskal() {
         // Wyzerowanie zmiennej time przed kolejnymi 50 pomiarami
         time = 0.0;
 
-        // 50 pomiarow
+        // 100 pomiarow
         for (int j = 0; j < 100; j++) {
 
             // Wygenerowanie grafu
@@ -612,7 +608,7 @@ void pomiaryKruskal() {
 
         }
 
-        // Obliczenie sredniego czasu z 50 pomiarow
+        // Obliczenie sredniego czasu z 100 pomiarow
         cout << endl << "Algorytm Kruskala, lista, gestosc " << density << "%, " << vertices << " wierzcholkow: " << time / 100.0 << " us." << endl;
 
         // Nastepna liczba wierzcholkow wieksza o 20 od poprzedniej
